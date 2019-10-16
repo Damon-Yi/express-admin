@@ -1,8 +1,7 @@
 import axios from "axios";
-import { ApiPath } from "@/api/path";
 
 const request = axios.create({
-  baseURL: ApiPath,
+  // baseURL: ApiPath,
   timeout: 15000
   //headers: { "X-Custom-Header": "foobar" }
 });

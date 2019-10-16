@@ -1,11 +1,17 @@
 import request from "./request";
 
-function getIndexData(data) {
+export const getReports = data => {
   return request({
-    url: "/ccm/index",
-    type: "get",
-    params: data
+    url: "http://47.56.199.89:3000/report/queryReport",
+    method: "post",
+    data
   });
-}
+};
 
-export { getIndexData }
+export const getReportsByDate = data => {
+  return request({
+    url: "http://47.56.199.89:3000/report/queryReportByDate",
+    method: "post",
+    data
+  });
+};
