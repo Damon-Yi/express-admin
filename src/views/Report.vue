@@ -18,6 +18,7 @@
         <el-table-column prop="proName" label="产品名"></el-table-column>
         <el-table-column prop="name" label="用户名"></el-table-column>
         <el-table-column prop="mobile" label="手机号"></el-table-column>
+        <el-table-column prop="channel" label="渠道"></el-table-column>
         <el-table-column prop="address" label="地址"></el-table-column>
         <el-table-column prop="convenientTime" label="方便联系时间"></el-table-column>
         <el-table-column label="提交时间" align="center">
