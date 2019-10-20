@@ -58,6 +58,7 @@ export default {
         "产品名",
         "用户名",
         "手机号",
+        "渠道",
         "地址",
         "方便联系时间",
         "提交时间"
@@ -66,6 +67,7 @@ export default {
         "proName",
         "name",
         "mobile",
+        "channel",
         "address",
         "convenientTime",
         "createTime"
