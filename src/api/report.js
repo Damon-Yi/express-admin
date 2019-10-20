@@ -1,8 +1,10 @@
 import request from "./request";
+let basePath = "http://47.56.199.89:3000/";
+// basePath = "http://localhost:3000/";
 
 export const getReports = data => {
   return request({
-    url: "http://47.56.199.89:3000/report/queryReport",
+    url: basePath + "report/queryReport",
     method: "post",
     data
   });
@@ -10,7 +12,15 @@ export const getReports = data => {
 
 export const getReportsByDate = data => {
   return request({
-    url: "http://47.56.199.89:3000/report/queryReportByDate",
+    url: basePath + "report/queryReportByDate",
+    method: "post",
+    data
+  });
+};
+
+export const deleteReport = data => {
+  return request({
+    url: basePath + "report/deleteReport",
     method: "post",
     data
   });
