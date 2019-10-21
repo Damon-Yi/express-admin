@@ -18,13 +18,19 @@
         <el-table-column prop="proName" label="产品名"></el-table-column>
         <el-table-column prop="name" label="用户名"></el-table-column>
         <el-table-column prop="mobile" label="手机号"></el-table-column>
+        <el-table-column prop="channel" label="渠道"></el-table-column>
         <el-table-column prop="address" label="地址"></el-table-column>
         <el-table-column prop="convenientTime" label="方便联系时间"></el-table-column>
         <el-table-column label="提交时间" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | parseTime }}</span>
-        </template>
-      </el-table-column>
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime | parseTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button size="mini" type="danger" @click="deleteFun(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <Pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" @pagination="getList" />
     </el-card>
@@ -32,7 +38,7 @@
 </template>
 
 <script>
-import { getReports, getReportsByDate } from "@/api/report";
+import { getReports, getReportsByDate, deleteReport } from "@/api/report";
 import Pagination from "@/components/Pagination";
 import { parseTime } from "@/utils/index";
 import { export_json_to_excel } from "@/utils/excel";
@@ -52,6 +58,7 @@ export default {
         "产品名",
         "用户名",
         "手机号",
+        "渠道",
         "地址",
         "方便联系时间",
         "提交时间"
@@ -60,6 +67,7 @@ export default {
         "proName",
         "name",
         "mobile",
+        "channel",
         "address",
         "convenientTime",
         "createTime"
@@ -117,6 +125,20 @@ export default {
           this.tableData = data.data;
           this.listLoading = false;
         }
+      });
+    },
+    deleteFun(row) {
+      this.$confirm("确定删除？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        deleteReport({ id: row.id }).then(({ data }) => {
+          if (data.code === 0) {
+            this.$message.success("删除成功");
+            this.getList();
+          }
+        });
       });
     },
     exportAll() {
