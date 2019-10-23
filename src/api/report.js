@@ -25,3 +25,21 @@ export const deleteReport = data => {
     data
   });
 };
+
+export const addRemark = data => {
+  //添加备注
+  return request({
+    url: basePath + "report/addRemark",
+    method: "post",
+    data
+  });
+};
+
+export const deleteRemark = data => {
+  //删除备注
+  return request({
+    url: basePath + "report/deleteRemark",
+    method: "post",
+    data
+  });
+};

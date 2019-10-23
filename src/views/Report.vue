@@ -14,7 +14,14 @@
         end-placeholder="结束日期"
         :picker-options="pickerOptions">
       </el-date-picker>
-      <el-table class="b-table" v-loading="listLoading" :data="tableData" element-loading-text="拼命加载中" border fit highlight-current-row>
+      <el-table class="b-table" v-loading="listLoading" :data="tableData" element-loading-text="拼命加载中" border fit highlight-current-row :default-expand-all="true">
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            <div class="remark-wrapper">
+              <el-tag type="info" closable @close="deleteRemarkFun(scope.row)">备注:{{scope.row.proName}}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column prop="proName" label="产品名"></el-table-column>
         <el-table-column prop="name" label="用户名"></el-table-column>
         <el-table-column prop="mobile" label="手机号"></el-table-column>
@@ -29,16 +36,36 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="danger" @click="deleteFun(scope.row)">删除</el-button>
+            <el-button size="mini" @click="addRemarkFun(scope.row)">备注</el-button>
           </template>
         </el-table-column>
       </el-table>
       <Pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" @pagination="getList" />
     </el-card>
+    <el-dialog
+      title="添加备注"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <el-input placeholder="请输入内容" v-model="remark">
+        <template slot="prepend">备注：</template>
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="saveRemark">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getReports, getReportsByDate, deleteReport } from "@/api/report";
+import {
+  getReports,
+  getReportsByDate,
+  deleteReport,
+  addRemark,
+  deleteRemark
+} from "@/api/report";
 import Pagination from "@/components/Pagination";
 import { parseTime } from "@/utils/index";
 import { export_json_to_excel } from "@/utils/excel";
@@ -103,7 +130,9 @@ export default {
           }
         ]
       },
-      exportDateVal: ""
+      exportDateVal: "",
+      dialogVisible: false,
+      remark: ""
     };
   },
   filters: {
@@ -124,6 +153,33 @@ export default {
           this.total = data.total;
           this.tableData = data.data;
           this.listLoading = false;
+        }
+      });
+    },
+    addRemarkFun(row) {
+      this.currReport = row;
+      this.dialogVisible = true;
+    },
+    saveRemark() {
+      if (!this.remark) return this.$message.warning("填写备注");
+      addRemark({ reportId: this.currReport.id, remark: this.remark }).then(
+        ({ data }) => {
+          if (data.code === 0) {
+            this.$message.success("操作成功");
+            this.currReport = null;
+            this.dialogVisible = false;
+            this.getList();
+          }
+        }
+      );
+    },
+    deleteRemarkFun(remark) {
+      // eslint-disable-next-line no-console
+      console.log(remark);
+      deleteRemark({ id: remark.id }).then(({ data }) => {
+        if (data.code === 0) {
+          this.$message.success("删除成功");
+          this.getList();
         }
       });
     },
@@ -196,5 +252,8 @@ export default {
   }
   .el-table td, .el-table th{
     padding: 4px 0 !important;
+  }
+  .remark-wrapper{
+    padding: 5px 15px;
   }
 </style>
