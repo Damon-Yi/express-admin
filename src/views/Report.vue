@@ -18,7 +18,7 @@
         <el-table-column type="expand">
           <template slot-scope="scope">
             <div class="remark-wrapper">
-              <el-tag type="info" closable @close="deleteRemarkFun(scope.row)">备注:{{scope.row.proName}}</el-tag>
+              <el-tag v-for="(re, index) in scope.row.remarks" :key="index" type="info" closable @close="deleteRemarkFun(re)">备注{{index+1}}:{{re.remark}} ({{re.createTime | parseTime}})</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -157,6 +157,7 @@ export default {
       });
     },
     addRemarkFun(row) {
+      this.remark = "";
       this.currReport = row;
       this.dialogVisible = true;
     },
@@ -174,8 +175,6 @@ export default {
       );
     },
     deleteRemarkFun(remark) {
-      // eslint-disable-next-line no-console
-      console.log(remark);
       deleteRemark({ id: remark.id }).then(({ data }) => {
         if (data.code === 0) {
           this.$message.success("删除成功");
@@ -255,5 +254,8 @@ export default {
   }
   .remark-wrapper{
     padding: 5px 15px;
+  }
+  .el-tag{
+    margin: 2px;
   }
 </style>
