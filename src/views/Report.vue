@@ -18,7 +18,7 @@
         <el-table-column type="expand">
           <template slot-scope="scope">
             <div class="remark-wrapper">
-              <el-tag v-for="(re, index) in scope.row.remarks" :key="index" type="info" closable @close="deleteRemarkFun(re)">备注{{index+1}}:{{re.remark}} ({{re.createTime | parseTime}})</el-tag>
+              <el-tag v-for="(re, index) in scope.row.remarks" :key="index" type="warning" closable @close="deleteRemarkFun(re)">备注{{index+1}}：{{re.remark}} ({{re.createTime | parseTime}})</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -253,9 +253,8 @@ export default {
     padding: 4px 0 !important;
   }
   .remark-wrapper{
-    padding: 5px 15px;
-  }
-  .el-tag{
-    margin: 2px;
+    .el-tag{
+      margin: 5px;
+    }
   }
 </style>
